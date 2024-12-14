@@ -2,8 +2,6 @@ import os
 import asyncio
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
-from aiogram.filters import CommandStart
-from aiogram.types import Message
 from handlers import router
 load_dotenv()
 
@@ -20,4 +18,3 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
-    

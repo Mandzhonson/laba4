@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from aiogram.filters import CommandStart
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 
-
 load_dotenv()
 
 
@@ -43,7 +42,7 @@ async def find_my_weather(message: Message):
     data = load_user_data(message.from_user.id)
     if data:
         await message.answer(
-            f"Найдена информация о вашем городе/районе: {data["city"]}"
+            f"Найдена информация о вашем городе/районе {data["city"]}:\n"
             f"Температура: {data["temp"]} ℃\n"
             f"Ощущается как: {data["temp_feels"]} ℃\n"
             f"Давление: {data["pressure"]} гПа\n"
@@ -93,11 +92,12 @@ async def find_city(message: Message):
         response = requests.get(
             f'http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&lang=ru&units=metric&appid={API_TOKEN}')
         data = response.json()
+
         temp = str(round(data['main']['temp']))
         temp_feels = str(round(data['main']['feels_like']))
         pressure = str(data['main']['pressure'])
         wind_speed = str(data['wind']['speed'])
-        city = data["sys"]["name"]
+        city = data["name"]
         data_to_save = {"user_id": user_id,
                         "city": city,
                         "temp": temp,
@@ -105,7 +105,13 @@ async def find_city(message: Message):
                         "pressure": pressure,
                         "wind_speed": wind_speed}
         save_weather_to_file(data_to_save)
-        await message.reply(f" погода: {temp} по цельсию")
+        await message.reply(
+            f"В городе/районе {city} погода такая:\n"
+            f"Температура: {temp} ℃\n"
+            f"Ощущается как: {temp_feels} ℃\n"
+            f"Давление: {pressure} гПа\n"
+            f"Скорость ветра: {wind_speed} м/с"
+        )
     except:
         await message.reply("Не получается определить ваше местоположение")
 
