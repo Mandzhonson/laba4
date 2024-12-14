@@ -9,6 +9,7 @@ load_dotenv()
 
 TOKEN = os.getenv("BOT_TOKEN")  # add your token
 
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
